@@ -1,0 +1,45 @@
+Le dépassement de pile d'exécution (ou "stack overflow") est un concept fondamental à comprendre.
+
+La pile d'exécution (call stack) est une zone de mémoire où Python stocke les informations sur les fonctions en cours d'exécution. Chaque fois qu'une fonction est appelée, Python ajoute un "cadre" (frame) sur cette pile.
+
+Pourquoi les boucles sont meilleures :
+
+Récursion : Chaque erreur = +1 niveau de pile -> risque de crash
+(en effet, lors d'une fonction récursive(qui s'appèle elle meme), les piles s'accumulent jusqu'a ce qu'un résultat valide [qui met fin à la récursion] est obtenue. Le nombre total par défaut d'accumulation de pile en python est de 1000 par fonction)
+
+Boucle : Chaque erreur = on recommence au même niveau -> pas de risque
+(aucune accumulation car la boucle reprend de 0; donc pas de risque de crache)
+
+C'est pourquoi pour la validation d'entrée utilisateur (où on ne sait jamais combien d'erreurs il va faire), les boucles sont toujours préférables à la récursion !
+
+###############
+
+Lors d'un appèl récursif, afin d'éviter de retourner "none", toujours utiliser le mot clé return afin qu'une vrai valeur soit toujours retourné.
+
+EX de fonction incorrect : 
+def choix():
+    num = input("Veuillez choisir un numéro compris entre 0 et 49 : ")
+    try:
+        num = int(num)
+        if (num < 0 or num > 49):
+            print("Choix non valide")
+            choix() #Erreur à ce niveau car pas de retour = return none
+        else:
+            return num
+    except:
+        print("Choix non valide")
+        choix() #Erreur à ce niveau car pas de retour = return none
+
+EX de fonction correct :
+def choix():
+    num = input("Veuillez choisir un numéro compris entre 0 et 49 : ")
+    try:
+        num = int(num)
+        if (num < 0 or num > 49):
+            print("Choix non valide")
+            return choix() #Toujours retourner la valeur de la fonction qui sera appelée
+        else:
+            return num
+    except:
+        print("Choix non valide")
+        return choix() #Toujours retourner la valeur de la fonction qui sera appelée
